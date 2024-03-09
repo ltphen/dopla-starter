@@ -1,3 +1,14 @@
+
+This is the starter project for this video : https://youtu.be/eBzJwlnrqIQ?si=FgxpM6-VHNzhgDvz
+
+
+
+Feels free to contribute
+
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
