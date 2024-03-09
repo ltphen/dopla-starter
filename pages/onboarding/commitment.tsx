@@ -21,15 +21,7 @@ export default function Page() {
     let router = useRouter()
 
     const action = (value: string)=>{
-        localStorage.setItem("commitment", value);
-        const userPreferences = {
-            commitment: value,
-            languageLevel: localStorage.getItem("languageLevel"),
-            objectives: localStorage.getItem("objectives"),
-        }
-        axios.post("/api/user/create_preference", userPreferences).then((val)=>{
-            router.push("/assistant/chat")
-        })
+        
     }
   return (
         <main className={`flex w-full min-h-screen bg-[#f7f5ff] flex-col p-0  ${inter.className}`}>  

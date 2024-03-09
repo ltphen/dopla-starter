@@ -22,8 +22,7 @@ export default function Page() {
     let router = useRouter()
 
     const action = (value: string)=>{
-        localStorage.setItem("objectives", value);
-        router.push("/onboarding/commitment")
+       
     }
   return (
         <main className={`flex w-full min-h-screen bg-[#f7f5ff] flex-col p-0  ${inter.className}`}>  

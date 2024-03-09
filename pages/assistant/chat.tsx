@@ -1,23 +1,12 @@
-import Image from "next/image";
 import { Inter, Source_Serif_4 } from "next/font/google";
-import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
 import { ChatSideNavProfile } from "@/components/ChatSideNavProfile";
 import { ChatBubble } from "@/components/ChatBubble";
-import { useEffect, useReducer, useRef, useState } from "react";
-import axios from "axios";
+
 
 const source_serif = Source_Serif_4({ subsets: ["latin"] });
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Page() {
-    const audioRef:any = useRef();
-	let elementToScroll: any = useRef();
-    const [conversation, setConversation] = useState([{
-        role: "assistant",
-        content: "Hi, how can I help you today?"
-    }])
-
     const characters = [
         {
             profile: "/profile1.jpg",
@@ -40,46 +29,10 @@ export default function Page() {
             description: "a resilient nomad, seeks vengeance after her tribes destruction but questions the morality of her quest."
         }
     ]
-    const [audioUrl, setAudioUrl] = useState("")
-    const [userMessage, setUserMessage] = useState("")
-    const [characterIndex, setCharacterIndex] = useState(0)
-
-    useEffect(() => {
-        if(audioUrl) {
-            audioRef.current.src = audioUrl
-            audioRef.current.play();
-            audioRef.current.addEventListener("ended", (event: any) => {
-                setAudioUrl("")
-            });
-            audioRef.current.addEventListener("canplay", (event: any) => {
-            
-            });
-        }
-        
-        
-      }, [audioUrl]);
-
-    const sendMessage = (e: any)=>{
-        e.preventDefault()
-        let actualConversation = [...conversation, {role: "user", content: userMessage}]
-        setConversation(actualConversation)
-        setUserMessage("")
-        scrollToBottom()
-        axios.post("/api/chat", {conversation: actualConversation}).then((response)=>{
-            setConversation([...actualConversation, response.data])
-            scrollToBottom()
-        })
-    }
-    const scrollToBottom = () => {
-        if(elementToScroll){
-            elementToScroll.scrollIntoView({ behavior: "smooth" });
-            elementToScroll.scrollTop = elementToScroll.scrollHeight + 200;
-        }
-	}
-
-    const readSection = (voice: string) => {
-		setAudioUrl(process.env.NEXT_PUBLIC_API_URL + '/read/text' + `?text=${encodeURIComponent(voice)}`)
-	}
+    const conversation = [{
+        role: "assistant",
+        content: "Hi, how can I help you today?"
+    }]
   return (
         <main className={`flex w-full h-screen bg-[#f7f5ff] flex-col p-0  ${inter.className}`}>  
            <div className="shadow flex items-center py-4 justify-center bg-[#f7f5ff]">
@@ -100,7 +53,6 @@ export default function Page() {
                     </svg>
                 </div>
                 <div className="ml-2 font-bold text-2xl">Dopla</div>
-                <audio className='hidden' ref={audioRef} src={audioUrl} controls />
 
 
             </div>
@@ -134,7 +86,7 @@ export default function Page() {
                             </div>
                             <div className="flex flex-col space-y-1 mt-4 -mx-2 overflow-y-auto">
                                 {characters.map((item, index)=>(
-                                    <ChatSideNavProfile onClick={()=>setCharacterIndex(index)} key={index} active={characterIndex == index} character={item}></ChatSideNavProfile>
+                                    <ChatSideNavProfile onClick={()=>{}} key={index} active={1 == index} character={item}></ChatSideNavProfile>
                                 ))}
                                 {/* <ChatSideNavProfile profile="/profile2.jpg" active={true}></ChatSideNavProfile>
                                 <ChatSideNavProfile profile="/profile3.jpg"></ChatSideNavProfile>
@@ -153,12 +105,12 @@ export default function Page() {
                                         <img
                                         className="aspect-square h-full w-full"
                                         alt="Image"
-                                        src={characters[characterIndex].profile}
+                                        src={characters[0].profile}
                                         />
                                     </span>
                                     <div>
-                                        <p className="text-md font-medium leading-none">{characters[characterIndex].name}</p>
-                                        <p className="text-[.8rem] text-gray-500 mt-2">{characters[characterIndex].description}</p>
+                                        <p className="text-md font-medium leading-none">{characters[0].name}</p>
+                                        <p className="text-[.8rem] text-gray-500 mt-2">{characters[0].description}</p>
                                     </div>
                                 </div>
                                 
@@ -166,25 +118,25 @@ export default function Page() {
                             
                             <div className="max-w-5xl mx-auto flex flex-col h-[80vh] justify-between">
                             
-                                <div className="h-5/6 overflow-auto p-6 pt-0 chatbox-container" ref={(el) => { elementToScroll = el; }}>
+                                <div className="h-5/6 overflow-auto p-6 pt-0 chatbox-container" >
                                     <div className="flex flex-col mb-16">
                                         <div className="flex items-center space-x-4 flex-col">
                                             <span className="relative flex h-[6rem] w-[6rem] shrink-0 overflow-hidden rounded-full">
                                                 <img
                                                 className="aspect-square h-full w-full"
                                                 alt="Image"
-                                                src={characters[characterIndex].profile}
+                                                src={characters[0].profile}
                                                 />
                                             </span>
                                             <div className="flex items-center flex-col mt-6">
-                                                <p className="text-md font-medium leading-none">{characters[characterIndex].name}</p>
-                                                <p className="text-[.8rem] text-gray-500 mt-2">{characters[characterIndex].description}</p>
+                                                <p className="text-md font-medium leading-none">{characters[0].name}</p>
+                                                <p className="text-[.8rem] text-gray-500 mt-2">{characters[0].description}</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="space-y-4">
                                         {conversation.map((message, index)=>(
-                                            <ChatBubble voice={()=>readSection(message.content)} key={index} direction={message.role == "assistant" ? "left" : "right"}>
+                                            <ChatBubble voice={()=>{}} key={index} direction={message.role == "assistant" ? "left" : "right"}>
                                                 {message.content}
                                             </ChatBubble>
                                         ))}
@@ -193,14 +145,13 @@ export default function Page() {
                                     </div>
                                 </div>
                                 <div className="flex items-center p-6 pt-0 ">
-                                    <form className="flex w-full items-center space-x-2" onSubmit={sendMessage}>
+                                    <form className="flex w-full items-center space-x-2">
                                     <input
                                         className="flex h-12 w-full rounded-md border border-gray-300 border-input bg-background px-3 py-4 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1"
                                         id="message"
                                         placeholder="Type your message..."
                                         autoComplete="off"
-                                        value={userMessage}
-                                        onChange={(e)=>setUserMessage(e.target.value)}
+                                        value={""}
                                     />
                                     <button
                                         className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-500 text-blue-500-foreground hover:bg-blue-500/90 h-12 w-12"
